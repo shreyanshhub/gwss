@@ -1,0 +1,205 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For Deeksha — Hugs & Love</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#fff6fb;
+      --bg2:#fff8f0;
+      --accent:#ff6b9a;
+      --muted:#7a5a6a;
+      --card:#ffffff;
+      --glass: rgba(255,255,255,0.6);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Montserrat,system-ui,Segoe UI,Roboto,Arial; background: linear-gradient(135deg,var(--bg1),var(--bg2));
+      display:flex; align-items:center; justify-content:center; padding:32px;
+    }
+    .wrap{
+      width:min(980px,96%); border-radius:20px; padding:36px; background:linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.65));
+      box-shadow:0 10px 30px rgba(122,90,106,0.12); position:relative; overflow:hidden; backdrop-filter: blur(6px);
+    }
+    header{display:flex; gap:20px; align-items:center}
+    .avatar{
+      width:96px; height:96px; border-radius:18px; background:linear-gradient(135deg,var(--accent),#ff9fc2); display:flex; align-items:center; justify-content:center; color:white; font-weight:700; font-size:28px; box-shadow:0 8px 20px rgba(255,107,154,0.18)
+    }
+    h1{margin:0; font-family:'Playfair Display',serif; font-size:28px; color:#402435}
+    p.lead{margin:6px 0 0; color:var(--muted)}.content{display:grid; grid-template-columns:1fr 360px; gap:28px; margin-top:24px}
+.card{background:var(--card); border-radius:14px; padding:20px; box-shadow:0 6px 18px rgba(122,90,106,0.06)}
+
+/* poem box */
+.poem{min-height:220px; display:flex; align-items:center; justify-content:center; text-align:center; padding:28px; border-radius:12px; position:relative}
+.poem .typewriter{font-family:'Playfair Display',serif; font-size:20px; color:#4c2d37; line-height:1.5;}
+
+footer{margin-top:20px; display:flex; gap:12px; align-items:center}
+.hug-btn{border:0; background:linear-gradient(90deg,var(--accent),#ff9fc2); color:white; padding:12px 18px; border-radius:12px; font-weight:600; cursor:pointer; font-size:16px; box-shadow:0 8px 18px rgba(255,107,154,0.18); transform-origin:center; transition:transform .12s ease}
+.hug-btn:active{transform:scale(.98)}
+
+.soft{background:linear-gradient(180deg,#fff,#fffefc); padding:12px; border-radius:10px; color:var(--muted)}
+
+/* floating hearts */
+.heart{position:absolute; width:18px; height:18px; transform:rotate(-45deg); left:10%; top:70%; opacity:0.95}
+.heart:before, .heart:after{content:""; position:absolute; width:18px; height:18px; border-radius:50%; background:linear-gradient(180deg,#ff8fb3,#ff6b9a)}
+.heart:before{top:-9px; left:0}
+.heart:after{left:9px; top:0}
+
+.float{animation:floatUp 6s linear infinite}
+.float.delay1{left:20%; animation-duration:7s}
+.float.delay2{left:70%; top:80%; animation-duration:5.5s}
+.float.delay3{left:50%; top:85%; animation-duration:6.5s}
+@keyframes floatUp{0%{transform:translateY(0) scale(1) rotate(-45deg); opacity:0}10%{opacity:1}100%{transform:translateY(-420px) scale(.7) rotate(-45deg); opacity:0}}
+
+/* little confetti bursts */
+.burst{position:absolute; inset:0; pointer-events:none}
+.dot{position:absolute; width:8px; height:8px; border-radius:2px; opacity:0}
+
+/* responsive */
+@media (max-width:900px){.content{grid-template-columns:1fr} .card.side{order:2}}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="avatar">D</div>
+      <div>
+        <h1>Deeksha — get well soon 💖</h1>
+        <p class="lead">A little page made to give you warm hugs, gentle energy, and a pocketful of love.</p>
+      </div>
+    </header><div class="content">
+  <div class="card poem">
+    <div class="typewriter" id="typewriter" aria-live="polite"></div>
+  </div>
+
+  <div class="card side soft">
+    <h3 style="margin-top:0">A hug, whenever you need</h3>
+    <p style="margin:0 0 12px">Click the big hug button — you'll get a shower of little hearts and a tiny surprise message.</p>
+    <button class="hug-btn" id="hugBtn">Send me a hug 🤗</button>
+
+    <div style="margin-top:16px; font-size:14px; color:var(--muted)">
+      <strong>Tips:</strong>
+      <ul style="padding-left:18px; margin:8px 0">
+        <li>Rest, sip warm fluids, and breathe slowly.</li>
+        <li>Play quiet music or this page's soft tones.</li>
+        <li>You're loved — you don't have to be strong all the time.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <small style="color:var(--muted)">Made with lots of care ❤ — open-source hugs</small>
+</footer>
+
+<!-- floating hearts -->
+<div class="heart float delay1" style="--i:1"></div>
+<div class="heart float delay2" style="--i:2"></div>
+<div class="heart float delay3" style="--i:3"></div>
+
+<div class="burst" id="burst"></div>
+
+<!-- gentle chime (play on user click) -->
+<audio id="chime" preload="auto">
+  <source src="" />
+</audio>
+
+  </div>  <script>
+    // poem lines (editable)
+    const poemLines = [
+      "Soft sunlight drips through your windowpane,",
+      "A thousand tiny wishes whisper your name.",
+      "Close your eyes ,let rest be near",
+      "I'm sending warmth, love, and a sea of hugs, my cute cat 🐈"
+    ];
+
+    // typewriter effect (gentle)
+    const tw = document.getElementById('typewriter');
+    let line = 0, char = 0;
+
+    function typeNext(){
+      if(line >= poemLines.length) return;
+      const txt = poemLines[line];
+      if(char <= txt.length){
+        tw.textContent = txt.slice(0,char) + (char % 2 ? '|' : '');
+        char++;
+        setTimeout(typeNext, 70 + Math.random()*40);
+      } else {
+        // pause then next line
+        tw.textContent = txt;
+        line++;
+        char = 0;
+        setTimeout(()=>{
+          if(line < poemLines.length) typeNext();
+        }, 700);
+      }
+    }
+    // start after small delay so it feels cozy
+    setTimeout(typeNext, 800);
+
+    // hug button: burst hearts + message + play chime if source provided
+    const hugBtn = document.getElementById('hugBtn');
+    const burst = document.getElementById('burst');
+    const chime = document.getElementById('chime');
+
+    function random(min,max){return Math.random()*(max-min)+min}
+    function makeDot(x,y, color){
+      const d = document.createElement('div'); d.className='dot';
+      d.style.left = x+'px'; d.style.top = y+'px';
+      d.style.background = color; d.style.opacity = 1; d.style.transform = 'translateY(0)';
+      burst.appendChild(d);
+      const dx = random(-120,120); const dy = random(-200,-80);
+      const rot = random(-360,360);
+      d.animate([
+        { transform: 'translate(0,0) rotate(0deg)', opacity:1 },
+        { transform: `translate(${dx}px, ${dy}px) rotate(${rot}deg)`, opacity:0 }
+      ], {duration:900 + Math.random()*400, easing:'cubic-bezier(.2,.8,.2,1)'});
+      setTimeout(()=>d.remove(), 1500);
+    }
+
+    hugBtn.addEventListener('click', ()=>{
+      // burst 16 dots of various colors
+      const rect = hugBtn.getBoundingClientRect();
+      const parentRect = burst.getBoundingClientRect();
+      const startX = rect.left + rect.width/2 - parentRect.left;
+      const startY = rect.top + rect.height/2 - parentRect.top;
+      const colors = ['#ff6b9a','#ff9fc2','#ffd1e3','#ffb6d5','#ffc9e3'];
+      for(let i=0;i<18;i++){
+        setTimeout(()=> makeDot(startX + random(-10,10), startY + random(-10,10), colors[i % colors.length]), i*18);
+      }
+
+      // play chime if available
+      try{ chime.currentTime = 0; chime.play().catch(()=>{}); }catch(e){}
+
+      // show a sweet overlay message using typewriter in poem box
+      const old = tw.textContent;
+      const message = [
+        "One big hug, across the miles 🤗", 
+        "You're held, you're loved, you're not alone.",
+        "Rest now, I'll be here when you wake."
+      ];
+      // temporarily replace poem with messages
+      let li=0, ch=0;
+      function showMsg(){
+        if(li >= message.length){ setTimeout(()=>{ tw.textContent = old; }, 1600); return; }
+        const t = message[li];
+        if(ch <= t.length){ tw.textContent = t.slice(0,ch) + (ch%2?'|':''); ch++; setTimeout(showMsg,40+Math.random()*40);
+        } else { li++; ch=0; setTimeout(showMsg,700); }
+      }
+      showMsg();
+    });
+
+    // accessibility: allow keyboard Enter/Space to activate
+    hugBtn.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); hugBtn.click(); } });
+
+    // helpful: allow quick edit of poemLines via window for the repo owner
+    // Example: open console and set window.poemLines = ['a','b']; then call window.reloadPoem()
+    window.reloadPoem = ()=>{ line=0; char=0; tw.textContent=''; typeNext(); };
+    window.poemLines = poemLines;
+  </script></body>
+</html>
